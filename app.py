@@ -5,18 +5,14 @@ import math
 import matplotlib.pyplot as plt
 
 
-# -----------------------------
-# Page configuration
-# -----------------------------
+
 st.set_page_config(
     page_title="ID3 Decision Tree Classifier",
     layout="wide"
 )
 
 
-# -----------------------------
-# Title & description
-# -----------------------------
+
 st.title("ID3 Decision Tree Classifier – Practical 2")
 
 st.write(
@@ -24,9 +20,6 @@ st.write(
 )
 
 
-# -----------------------------
-# Helper functions
-# -----------------------------
 def entropy(column):
     values, counts = np.unique(column, return_counts=True)
     ent = 0
@@ -51,10 +44,6 @@ def information_gain(data, feature, target):
 
     return total_entropy - weighted_entropy
 
-
-# -----------------------------
-# Sidebar
-# -----------------------------
 st.sidebar.header("Dataset Source")
 
 data_option = st.sidebar.selectbox(
@@ -63,9 +52,7 @@ data_option = st.sidebar.selectbox(
 )
 
 
-# -----------------------------
-# Load data
-# -----------------------------
+
 if data_option == "Upload CSV file":
 
     uploaded_file = st.sidebar.file_uploader(
@@ -95,16 +82,12 @@ else:
     })
 
 
-# -----------------------------
-# Show dataset
-# -----------------------------
+
 st.subheader("Dataset Preview")
 st.dataframe(data)
 
 
-# -----------------------------
-# Target selection
-# -----------------------------
+
 st.sidebar.header("Target Selection")
 
 target_col = st.sidebar.selectbox(
@@ -116,9 +99,7 @@ target_col = st.sidebar.selectbox(
 features = [col for col in data.columns if col != target_col]
 
 
-# -----------------------------
-# Analyse features
-# -----------------------------
+
 st.subheader("Feature Analysis (ID3)")
 
 base_entropy = entropy(data[target_col])
@@ -126,18 +107,14 @@ base_entropy = entropy(data[target_col])
 st.write("Target Entropy :", round(base_entropy, 4))
 
 
-# -----------------------------
-# Calculate Information Gain
-# -----------------------------
+
 gains = {}
 
 for feat in features:
     gains[feat] = information_gain(data, feat, target_col)
 
 
-# -----------------------------
-# Show gains table
-# -----------------------------
+
 gain_df = pd.DataFrame({
     "Feature": list(gains.keys()),
     "Information Gain": list(gains.values())
@@ -147,17 +124,12 @@ st.subheader("Information Gain of Features")
 st.dataframe(gain_df)
 
 
-# -----------------------------
-# Best feature (ID3 split)
-# -----------------------------
+
 best_feature = gain_df.iloc[0]["Feature"]
 
 st.success(f"Best Feature for first split (ID3) : {best_feature}")
 
 
-# -----------------------------
-# Visualization
-# -----------------------------
 st.subheader("Feature Importance (Information Gain)")
 
 fig, ax = plt.subplots(figsize=(7, 5))
@@ -176,9 +148,7 @@ plt.xticks(rotation=45)
 st.pyplot(fig)
 
 
-# -----------------------------
-# Target variable distribution
-# -----------------------------
+
 st.subheader("Target Variable Distribution")
 
 fig2, ax2 = plt.subplots()
@@ -195,7 +165,5 @@ ax2.set_ylabel("Count")
 st.pyplot(fig2)
 
 
-# -----------------------------
-# Short note
-# -----------------------------
+
 st.info("ID3 algorithm selects the feature with maximum Information Gain at each node.")
